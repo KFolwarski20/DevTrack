@@ -1,0 +1,119 @@
+@import url('https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap');
+
+body {
+    margin: 0;
+    font-family: 'Roboto', sans-serif;
+    height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background: linear-gradient(135deg, #4B0082, #1E90FF, #8B0000);
+    background-size: 600% 600%;
+    animation: gradientBG 15s ease infinite;
+    color: #fff;
+}
+
+@keyframes gradientBG {
+    0% {background-position: 0 50%;}
+    50% {background-position: 100% 50%;}
+    100% {background-position: 0 50%;}
+}
+
+.container {
+    background-color: rgba(20, 20, 30, 0.95);
+    padding: 50px 40px;
+    border-radius: 20px;
+    box-shadow: 0 0 50px rgba(0,0,0,0.6);
+    width: 380px;
+    text-align: center;
+    overflow: hidden;
+}
+
+h2 {
+    margin-bottom: 30px;
+    font-size: 32px;
+    color: #FFD700;
+    text-shadow: 1px 1px 8px #000;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+label {
+    text-align: left;
+    margin-bottom: 6px;
+    font-weight: bold;
+    color: #fff;
+}
+
+input {
+    padding: 14px 16px;
+    border: none;
+    border-radius: 12px;
+    background: rgba(255,255,255,0.1);
+    color: #fff;
+    font-size: 16px;
+    transition: all 0.3s ease;
+}
+
+input:focus {
+    background: rgba(255,255,255,0.2);
+    box-shadow: 0 0 12px #1E90FF;
+    outline: none;
+}
+
+button {
+    padding: 14px;
+    border: none;
+    border-radius: 12px;
+    background: linear-gradient(45deg, #8B0000, #4B0082, #1E90FF);
+    background-size: 200% 200%;
+    color: #fff;
+    font-size: 18px;
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.4s ease;
+}
+
+button:hover {
+    background-position: right center;
+    transform: scale(1.05);
+    box-shadow: 0 0 18px #FFD700;
+}
+
+.link {
+    margin-top: 15px;
+    font-size: 14px;
+}
+
+.link a {
+    color: #1E90FF;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.link a:hover {
+    color: #FFD700;
+    text-shadow: 1px 1px 5px #000;
+}
+
+.footer {
+    margin-top: 25px;
+    font-size: 12px;
+    color: #ccc;
+    text-align: center;
+}
+
+.footer a {
+    color: #1E90FF;
+    text-decoration: none;
+    transition: 0.3s;
+}
+
+.footer a:hover {
+    color: #FFD700;
+    text-shadow: 1px 1px 5px #000;
+}

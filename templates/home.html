@@ -1,0 +1,28 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Sign Up - DevTrack</title>
+        <link rel="stylesheet" href="{% static 'styles/style.css' %}">
+    </head>
+    <body>
+        <div class="container">
+            <h2>Sign Up</h2>
+            <form method="post">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <button type="submit">Create Account</button>
+            </form>
+            <div class="link">
+                Already have an account? <a href="{% url 'login' %}">Login</a>
+            </div>
+            <div class="footer">
+                &copy; 2025 DevTrack. All rights reserved. |
+                <a href="#">Privacy Policy</a> |
+                <a href="#">Terms of Service</a>
+            </div>
+        </div>
+    </body>
+</html>
