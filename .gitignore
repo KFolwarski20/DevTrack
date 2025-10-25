@@ -41,7 +41,3 @@ coverage.xml
 *.py,cover
 nosetests.xml
 test-reports/
-
-# Migrations (optional, include if you want to ignore migrations)
-# */migrations/*.py
-# */migrations/*.pyc

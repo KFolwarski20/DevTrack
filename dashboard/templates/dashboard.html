@@ -1,0 +1,59 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dashboard - DevTrack</title>
+    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="{% static 'js/dashboard.js' %}"></script>
+</head>
+<body class="bg-gray-50 font-sans min-h-screen">
+    <header class="bg-white shadow-md py-4 mb-8">
+        <div class="container mx-auto flex flex-col md:flex-row justify-between items-center px-4 md:px-6">
+            <h1 class="text-3xl font-bold text-gray-800">DevTrack Dashboard</h1>
+            <div class="flex items-center gap-4 mt-2 md:mt-0">
+                <span class="text-gray-700">Hello, <strong>{{ user.username }}</strong></span>
+                <form method="post" action="{% url 'sign_out' %}">
+                    {% csrf_token %}
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 text-white px-4 py-2 rounded-lg transition">Log Out</button>
+                </form>
+            </div>
+        </div>
+    </header>
+    <div class="container mx-auto px-4 md:px-6">
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 flex flex-col sm:flex-row items-center justify-between gap-4">
+            <div>
+                <p class="text-gray-500 font-medium">Top Programming Language</p>
+                <h2 class="text-2xl font-bold text-blue-600">{{ best_language }}</h2>
+            </div>
+            {% with icon_path='icons/'|add:best_language|add:'.png' %}
+                <img src="{% static icon_path %}" alt="{{ best_language }}" class="w-20 h-20 sm:w-24 sm:h-24">
+            {% endwith %}
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-8">
+            {% for lang in languages %}
+            <div class="bg-white rounded-2xl shadow-md p-5 flex items-center space-x-4">
+                {% with icon_path='icons/'|add:lang.name|add:'.png' %}
+                    <img src="{% static icon_path %}" alt="{{ lang.name }}" class="w-12 h-12">
+                {% endwith %}
+                <div>
+                    <p class="font-semibold text-blue-600">{{ lang.name|capfirst }}</p>
+                    <p class="text-gray-500">{{ lang.hours|default:"0" }}h</p>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+        <div class="bg-white rounded-2xl shadow-lg p-6 mb-8 max-w-md mx-auto">
+            <h3 class="text-xl font-semibold mb-4 text-gray-700 text-center">Time Distribution by Language</h3>
+            <div class="w-full h-64">
+                <canvas id="languageChart"
+                    data-labels='{{ chart_labels|safe }}'
+                    data-data='{{ chart_data|safe }}'></canvas>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

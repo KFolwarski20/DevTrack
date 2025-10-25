@@ -10,7 +10,7 @@ def sign_up_view(request):
         if form.is_valid():
             user = form.save()
             login(request, user)
-            return redirect('home')
+            return redirect('dashboard')
     else:
         form = RegistrationForm()
     return render(request, 'accounts/sign_up.html', {'form': form})
@@ -22,7 +22,7 @@ def sign_in_view(request):
         if form.is_valid():
             user = form.get_user()
             login(request, user)
-            return redirect('home')
+            return redirect('dashboard')
     else:
         form = AuthenticationForm()
     return render(request, 'accounts/sign_in.html', {'form': form})
