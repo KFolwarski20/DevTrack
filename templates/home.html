@@ -10,13 +10,13 @@
     <body>
         <div class="container">
             <h2>Sign Up</h2>
-            <form method="post">
+            <form method="post" action="{% url 'sign_up' %}">
                 {% csrf_token %}
                 {{ form.as_p }}
                 <button type="submit">Create Account</button>
             </form>
             <div class="link">
-                Already have an account? <a href="{% url 'login' %}">Login</a>
+                Already have an account? <a href="{% url 'sign_in' %}">Sign in</a>
             </div>
             <div class="footer">
                 &copy; 2025 DevTrack. All rights reserved. |
