@@ -25,9 +25,15 @@ document.addEventListener("DOMContentLoaded", function() {
             plugins: {
                 legend: {
                     position: 'bottom',
-                    labels: { padding: 15, font: { size: 14 } }
+                    labels: {
+                        padding: 15,
+                        font: {
+                            size: 14,
+                            family: 'Roboto'
+                        }
+                    }
                 }
-            }
+            },
         }
     });
 });
