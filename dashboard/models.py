@@ -4,11 +4,15 @@ from django.contrib.auth.models import User
 
 class ProgrammingLog(models.Model):
     LANGUAGE_CHOICES = [
-        ('python', 'Python'),
         ('javascript', 'JavaScript'),
+        ('python', 'Python'),
         ('java', 'Java'),
-        ('c++', 'C++'),
+        ('c#', 'C#'),
+        ('html', 'HTML'),
+        ('sql', 'SQL'),
         ('go', 'Go'),
+        ('ruby', 'Ruby'),
+        ('c++', 'C++'),
     ]
 
     user = models.ForeignKey(User, on_delete=models.CASCADE)
@@ -18,3 +22,12 @@ class ProgrammingLog(models.Model):
 
     def __str__(self):
         return f"{self.user.username} - {self.language} - {self.hours}h"
+
+    @classmethod
+    def ensure_user_logs(cls, user):
+        """ Create missing logs for the new User """
+        existing_logs = ProgrammingLog.objects.filter(user=user).values_list('language', flat=True)
+        missing_logs = [lang for lang, _ in cls.LANGUAGE_CHOICES if lang not in existing_logs]
+
+        for lang in missing_logs:
+            cls.objects.create(user=user, language=lang, hours=0)
