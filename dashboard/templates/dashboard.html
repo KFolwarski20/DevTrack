@@ -1,128 +1,122 @@
 {% load static %}
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dashboard - DevTrack</title>
-
-    <!-- Tailwind + Roboto font -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
-
-    <!-- Custom CSS -->
-    <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
-
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-    <script src="{% static 'js/dashboard.js' %}"></script>
-</head>
-
-<body class="dashboard-body font-['Roboto'] text-white min-h-screen flex flex-col">
-
-    <!-- Header -->
-    <header class="bg-white/10 backdrop-blur-md border-b border-white/20 py-4 px-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
-        <h1 class="text-3xl font-bold tracking-tight">DevTrack Dashboard</h1>
-        <div class="flex items-center gap-4 mt-3 sm:mt-0">
-            <span class="text-white/90">Hello, <strong>{{ user.username }}</strong></span>
-            <form method="post" action="{% url 'sign_out' %}">
-                {% csrf_token %}
-                <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition duration-300">
-                    Log Out
-                </button>
-            </form>
-        </div>
-    </header>
-
-    <!-- Main Container -->
-    <main class="flex-grow container mx-auto px-4 md:px-8 py-8">
-
-        <!-- Top Technology -->
-        <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-6 border border-white/20">
-            <div>
-                <p class="text-white/70 font-medium">Top Programming Technology</p>
-                <h2 class="text-3xl font-bold text-white mt-1">{{ best_language }}</h2>
-            </div>
-            {% with icon_path='icons/'|add:best_language|add:'.png' %}
-                <img src="{% static icon_path %}" alt="{{ best_language }}" class="w-20 h-20 sm:w-24 sm:h-24 drop-shadow-lg">
-            {% endwith %}
-        </div>
-
-        <!-- Language Summary -->
-        <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
-            {% for lang in languages %}
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-5 flex items-center gap-4 border border-white/20 hover:scale-[1.02] transition duration-300">
-                {% with icon_path='icons/'|add:lang.name|add:'.png' %}
-                    <img src="{% static icon_path %}" alt="{{ lang.name }}" class="w-12 h-12">
-                {% endwith %}
-                <div>
-                    <p class="font-semibold text-white text-lg">{{ lang.name|capfirst }}</p>
-                    <p class="text-white/70">{{ lang.hours|default:"0" }}h</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-
-        <!-- Charts and Logs -->
-        <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
-
-            <!-- Chart -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/20">
-                <h3 class="text-xl font-semibold mb-4 text-center text-white/90">Time Distribution by Language</h3>
-                <div class="w-full h-64">
-                    <canvas id="languageChart"
-                            data-labels='{{ chart_labels|safe }}'
-                            data-data='{{ chart_data|safe }}'></canvas>
-                </div>
-            </div>
-
-            <!-- Logs -->
-            <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/20">
-                <h3 class="text-xl font-semibold mb-4 text-white/90">Your Work Logs</h3>
-
-                <form method="post" action="{% url 'dashboard:add_log' %}" class="mb-6 flex flex-col sm:flex-row gap-3">
+    <head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Dashboard - DevTrack</title>
+        <script src="https://cdn.tailwindcss.com"></script>
+        <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+        <link rel="stylesheet" href="{% static 'styles/dashboard.css' %}">
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+        <script src="{% static 'js/dashboard.js' %}"></script>
+    </head>
+    <body class="dashboard-body font-['Roboto'] text-white min-h-screen flex flex-col">
+        <header class="bg-white/10 backdrop-blur-md border-b border-white/20 py-4 px-6 flex flex-col sm:flex-row justify-between items-center shadow-lg">
+            <h1 class="text-3xl font-bold tracking-tight">DevTrack Dashboard</h1>
+            <div class="flex items-center gap-4 mt-3 sm:mt-0">
+                <span class="text-white/90">Hello, <strong>{{ user.username }}</strong></span>
+                <form method="post" action="{% url 'sign_out' %}">
                     {% csrf_token %}
-                    {{ form.language }}
-                    {{ form.hours }}
-                    <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-medium transition duration-300">
-                        Add
+                    <button type="submit" class="bg-red-500 hover:bg-red-600 px-4 py-2 rounded-lg font-medium transition duration-300">
+                        Log Out
                     </button>
                 </form>
-
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse text-white/90">
-                        <thead>
-                            <tr class="bg-white/10">
-                                <th class="px-4 py-2">Date</th>
-                                <th class="px-4 py-2">Language</th>
-                                <th class="px-4 py-2">Hours</th>
-                                <th class="px-4 py-2">Actions</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            {% for log in logs %}
-                            <tr class="border-b border-white/10 hover:bg-white/5 transition">
-                                <td class="px-4 py-2">{{ log.date }}</td>
-                                <td class="px-4 py-2">{{ log.get_language_display }}</td>
-                                <td class="px-4 py-2">{{ log.hours }}</td>
-                                <td class="px-4 py-2 flex gap-3">
-                                    <a href="{% url 'dashboard:edit_log' log.pk %}" class="text-blue-400 hover:underline">Edit</a>
-                                    <form method="post" action="{% url 'dashboard:delete_log' log.pk %}" class="inline">
-                                        {% csrf_token %}
-                                        <button type="submit" class="text-red-400 hover:underline">Delete</button>
-                                    </form>
-                                </td>
-                            </tr>
-                            {% empty %}
-                            <tr>
-                                <td colspan="4" class="text-center py-4 text-white/60">No logs yet</td>
-                            </tr>
-                            {% endfor %}
-                        </tbody>
-                    </table>
+            </div>
+        </header>
+        <main class="flex-grow container mx-auto px-4 md:px-8 py-8">
+            <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-xl p-6 mb-10 flex flex-col sm:flex-row items-center justify-between gap-6 border border-white/20">
+                <div>
+                    <p class="text-white/70 font-medium">Top Programming Technology</p>
+                    <h2 class="text-3xl font-bold text-white mt-1">{{ best_language }}</h2>
+                </div>
+                {% with icon_path='icons/'|add:best_language|add:'.png' %}
+                    <img src="{% static icon_path %}" alt="{{ best_language }}" class="w-20 h-20 sm:w-24 sm:h-24 drop-shadow-lg">
+                {% endwith %}
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
+                {% for lang in languages %}
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-5 flex items-center gap-4 border border-white/20 hover:scale-[1.02] transition duration-300">
+                    {% with icon_path='icons/'|add:lang.name|add:'.png' %}
+                        <img src="{% static icon_path %}" alt="{{ lang.name }}" class="w-12 h-12">
+                    {% endwith %}
+                    <div>
+                        <p class="font-semibold text-white text-lg">{{ lang.name|capfirst }}</p>
+                        <p class="text-white/70">{{ lang.hours|default:"0" }}h</p>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-8">
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/20">
+                    <h3 class="text-xl font-semibold mb-4 text-center text-white/90">Time Distribution by Language</h3>
+                    <div class="w-full h-64">
+                        <canvas
+                                id="languageChart"
+                                data-labels='{{ chart_labels|safe }}'
+                                data-data='{{ chart_data|safe }}'>
+                        </canvas>
+                    </div>
+                </div>
+                <div class="bg-white/10 backdrop-blur-lg rounded-2xl shadow-lg p-6 border border-white/20">
+                    <h3 class="text-xl font-semibold mb-4 text-white/90">Your Work Logs</h3>
+                    <form method="post" action="{% url 'dashboard:add_log' %}" class="mb-6 flex flex-col sm:flex-row gap-3">
+                        {% csrf_token %}
+                        {{ form.language }}
+                        {{ form.hours }}
+                        <button type="submit" class="bg-blue-500 hover:bg-blue-600 px-4 py-2 rounded-lg font-medium transition duration-300">
+                            Add
+                        </button>
+                    </form>
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left border-collapse text-white/90">
+                            <thead>
+                                <tr class="bg-white/10">
+                                    <th class="px-4 py-2">Date</th>
+                                    <th class="px-4 py-2">Language</th>
+                                    <th class="px-4 py-2">Hours</th>
+                                    <th class="px-4 py-2">Actions</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for log in logs %}
+                                    {% if log.hours > 0 %}
+                                    <tr class="border-b border-white/10 hover:bg-white/5 transition">
+                                        <td class="px-4 py-2">{{ log.date }}</td>
+                                        <td class="px-4 py-2">{{ log.get_language_display }}</td>
+                                        <td class="px-4 py-2">{{ log.hours }}</td>
+                                        <td class="px-4 py-2 flex gap-3">
+                                            <a href="{% url 'dashboard:edit_log' log.pk %}" class="text-blue-400 hover:underline">Edit</a>
+                                            <form method="post" action="{% url 'dashboard:delete_log' log.pk %}" class="inline">
+                                                {% csrf_token %}
+                                                <button type="submit" class="text-red-400 hover:underline">Delete</button>
+                                            </form>
+                                        </td>
+                                    </tr>
+                                    {% endif %}
+                                {% empty %}
+                                <tr>
+                                    <td colspan="4" class="text-center py-4 text-white/60">No logs yet</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                        <div class="flex justify-center items-center mt-6 space-x-4 text-white/80">
+                            {% if logs.has_previous %}
+                                <a href="?page={{ logs.previous_page_number }}" class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded transition">Previous</a>
+                            {% endif %}
+                            <span class="px-3 py-1 bg-white/10 rounded">
+                                Page {{ logs.number }} of {{ logs.paginator.num_pages }}
+                            </span>
+                            {% if logs.has_next %}
+                                <a href="?page={{ logs.next_page_number }}"
+                                   class="px-3 py-1 bg-white/10 hover:bg-white/20 rounded transition">Next
+                                </a>
+                            {% endif %}
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
-    </main>
-</body>
+        </main>
+    </body>
 </html>

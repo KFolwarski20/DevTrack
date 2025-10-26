@@ -12,7 +12,6 @@
         <h2>Create Account</h2>
         <form method="post">
             {% csrf_token %}
-
             {% if form.non_field_errors %}
                 <div class="error">
                     {% for error in form.non_field_errors %}
@@ -20,7 +19,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
             <label for="{{ form.username.id_for_label }}">Username</label>
             {{ form.username }}
             {% if form.username.errors %}
@@ -30,7 +28,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
             <label for="{{ form.email.id_for_label }}">Email</label>
             {{ form.email }}
             {% if form.email.errors %}
@@ -40,7 +37,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
             <label for="{{ form.password1.id_for_label }}">Password</label>
             {{ form.password1 }}
             {% if form.password1.errors %}
@@ -50,7 +46,6 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
             <label for="{{ form.password2.id_for_label }}">Confirm Password</label>
             {{ form.password2 }}
             {% if form.password2.errors %}
@@ -60,14 +55,11 @@
                     {% endfor %}
                 </div>
             {% endif %}
-
             <button type="submit">Sign Up</button>
         </form>
-
         <div class="link">
             Already have an account? <a href="{% url 'sign_in' %}">Sign In</a>
         </div>
-
         <div class="footer">
             &copy; 2025 DevTrack. All rights reserved. |
             <a href="#">Privacy Policy</a> |

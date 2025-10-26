@@ -4,6 +4,7 @@ document.addEventListener("DOMContentLoaded", function() {
     const data = JSON.parse(canvas.dataset.data);
 
     const ctx = canvas.getContext('2d');
+
     new Chart(ctx, {
         type: 'pie',
         data: {
@@ -26,14 +27,29 @@ document.addEventListener("DOMContentLoaded", function() {
                 legend: {
                     position: 'bottom',
                     labels: {
+                        color: '#fff',
                         padding: 15,
                         font: {
                             size: 14,
                             family: 'Roboto'
                         }
                     }
+                },
+                tooltip: {
+                    bodyColor: '#fff',
+                    titleColor: '#fff',
+                    backgroundColor: 'rgba(0,0,0,0.7)'
+                },
+                title: {
+                    display: true,
+                    text: 'Time Distribution by Language',
+                    color: '#fff',
+                    font: {
+                        size: 18,
+                        weight: 'bold'
+                    }
                 }
-            },
+            }
         }
     });
 });

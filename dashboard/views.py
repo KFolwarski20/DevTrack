@@ -1,4 +1,6 @@
 import json
+
+from django.core.paginator import Paginator
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
 from dashboard.models import ProgrammingLog
@@ -7,7 +9,12 @@ from dashboard.forms import ProgrammingLogForm
 
 @login_required
 def dashboard_view(request):
-    logs = ProgrammingLog.objects.filter(user=request.user)
+    logs = ProgrammingLog.objects.filter(user=request.user).order_by('-date')
+    active_logs = logs.filter(hours__gt=0)
+    paginator = Paginator(active_logs, 4)
+    page_number = request.GET.get('page')
+    page_obj = paginator.get_page(page_number)
+
     total_hours_by_language = {
         log.get_language_display(): float(log.hours)
         for log in logs
@@ -21,7 +28,7 @@ def dashboard_view(request):
         "chart_data": json.dumps(chart_data),
         "languages": [{"name": k, "hours": v} for k, v in total_hours_by_language.items()],
         "best_language": max(total_hours_by_language, key=total_hours_by_language.get),
-        "logs": logs,
+        "logs": page_obj,
         "form": ProgrammingLogForm(),
     }
 
